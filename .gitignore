@@ -1,0 +1,4 @@
+# This file is used to remove files from the git repo
+__pycache__/
+venv
+.DS_Store

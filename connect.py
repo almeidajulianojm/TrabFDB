@@ -5,6 +5,7 @@
 # Por último rode a interface com streamlit run connect.py
 #
 ####################################################################################################################
+
 # Bibliotecas:
 import pandas as pd
 import streamlit as st 
@@ -38,7 +39,7 @@ st.caption('# Banco de Dados IMDb')
 
 engine = create_engine("postgresql://postgres:12345@localhost:5432/trab")
 
-tab1, tab2, tab3 = st.tabs(['DB', 'Consultas s/ atributo', 'Consultas c/ atributo'])
+tab1, tab2, tab3, tab4 = st.tabs(['DB', 'Consultas s/ atributo', 'Consultas c/ atributo', 'Gatilho'])
 
 with tab1:
     table = st.selectbox('Escolha a tabela que deseja ver:', ['atuouem', 'camera', 'contemmusica', 'ehgenero', 'ganhoupremio_premios', 'genero', 'indicadopor', 'laboratorio', 'mixagemsom', 'musica', 'musicapor', 'nome', 'processocinematografico', 'temcamera', 'temlaboratorio', 'temmixagem', 'temprocessocine', 'titulo', 'trabalhou_em', 'versao'])
@@ -54,7 +55,7 @@ with tab1:
 
 with tab2:
     query = {
-        "Consulta 1: Contagem de títulos que têm mais de uma versão": """
+        "Consulta 1: Contagem de títulos que têm mais de uma 70 versões": """
             SELECT t.tituloOriginal
             FROM Titulo AS t
             JOIN GanhouPremio_Premios AS gp ON t.idTitulo = gp.fk_Titulo_idTitulo
@@ -145,7 +146,7 @@ with tab2:
     st.table(query_result)
 
 with tab3:
-    st.header('Consulta 1: Contagem de títulos que têm mais de x versões') 
+    st.header('Consulta 1: Contagem de títulos que têm mais de X versões') 
     count = st.slider('Escolha o número de versões:', 50, 100)
     
     query = text("""
@@ -162,7 +163,7 @@ with tab3:
     st.table(query_result)
     
     ############################################################################################################
-    st.header('Consulta 6: Listar pessoas que x e y títulos')
+    st.header('Consulta 6: Listar pessoas que X e Y Funções em um mesmo Título')
     funcao1 = st.selectbox('Função 1:', ["writer", "director", "editor", "producer", "composer", "cinematographer", "production_designer"])
     funcao2 = st.selectbox('Função 2:', ["writer", "director", "editor", "producer", "composer", "cinematographer", "production_designer"])
     
@@ -181,7 +182,7 @@ with tab3:
     st.table(query_result)
     
     ############################################################################################################
-    st.header('Consulta 7: Títulos de x das obras que ganharam um prémio')
+    st.header('Consulta 7: Títulos de X Gênero das obras que ganharam um prémio')
     gen = st.selectbox('Escolha o gênero:', ["Action", "Adventure", "Animation", "Comedy", "Crime", "Drama", "Family", "Romance", "Sci-Fi", "Thriller", "Western"])
     
     query = text("""
@@ -200,7 +201,10 @@ with tab3:
 
     query_result = pd.read_sql_query(query, engine)
     st.table(query_result)
-      
-# Consultas com parâmetros para usar: 6 (Escolher o papel da pessoa), 7 (Escolher o Gênero) e 1 (Escolher o número de versões);
+
+with tab4:
+    
+    query_result = pd.read_sql_query(query, engine)
+    st.table(query_result)
 
 # Trabalho Final para a cadeira de Fundamentos de Bancos de Dados por Juliano Machado e Lucas Caíque;

@@ -1,3 +1,7 @@
+/* Um gatilho que é acionado sempre que um novo voto é adicionado a um título.
+Ele recalcula automaticamente a média de votos na tabela Titulo para refletir a
+alteração. */
+
 -- Gatilho para inserção de título
 CREATE OR REPLACE FUNCTION insere_titulo_trigger()
 RETURNS TRIGGER AS $insere_titulo_trigger$

@@ -1,23 +1,55 @@
-/* Este gatilho atualiza a tabela trabalhou_em com 
-   id dos atores, id dos títulos e função 'actor'.
-   Evita a necessidade de inserir manualmente info.
-   sobre atores em duas tabelas diferentes.*/
+-- Gatilho para inserção de título
+CREATE OR REPLACE FUNCTION insere_titulo_trigger()
+RETURNS TRIGGER AS $insere_titulo_trigger$
+BEGIN
+    -- Inserir automaticamente uma versão associada ao novo título
+    INSERT INTO Versao (ordemversao, tituloVersao, ehTituloOriginal, fk_Titulo_idTitulo)
+    VALUES (1, NEW.tituloOriginal, true, NEW.idTitulo);
 
-create or replace function insereatores_trabalhou_em()
-	RETURNS trigger as $insereatores_trabalhou_em$
-	BEGIN
-		INSERT INTO trabalhou_em
-		VALUES (new.fk_nome_idnome, new.fk_titulo_idtitulo, 'actor');
-		return new;
-	END;
-$insereatores_trabalhou_em$ LANGUAGE 'plpgsql' 
+    RETURN NEW;
+END;
+$insere_titulo_trigger$ LANGUAGE 'plpgsql';
 
-create trigger insereatores_trabalhou_em
-after insert on atuouem
-for each row
-execute procedure insereatores_trabalhou_em();
+-- Associação do gatilho à tabela Titulo
+CREATE TRIGGER insere_titulo_trigger
+AFTER INSERT ON Titulo
+FOR EACH ROW
+EXECUTE FUNCTION insere_titulo_trigger();
 
-/* Testando trigger */
+INSERT INTO Titulo (
+    idTitulo,
+    tituloOriginal,
+    tipoTitulo,
+    anoLancamento,
+    duracao,
+    resumo,
+    verba,
+    arrecUscan,
+    arrecSemanaus,
+    numVotos,
+    anoFim,
+    arrecGlobal,
+    mediaVotos,
+    nro_ep,
+    nro_temp,
+    fk_Titulo_idTitulo
+) VALUES (
+    'TT000004',
+    'Meu Novo Filme',
+    'Filme',
+    2024,
+    120,
+    'Um filme incrível',
+    5000000,
+    2000000,
+    500000,
+    1000,
+    2024,
+    10000000,
+    9.5,
+    0,
+    1,
+	NULL
+);
 
-insert into atuouem values('tt0126029','nm0000098','teste')
-select * from trabalhou_em where funcao='actor'
+select * from versao

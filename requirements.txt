@@ -4,3 +4,4 @@ psycopg2
 numpy
 plotly.express
 sqlalchemy 
+streamlit_antd_components

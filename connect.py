@@ -1,8 +1,6 @@
 ####################################################################################################################
 #
-# Para executar ative o venv com .\venv\Scripts\Activate.ps1
-# Depois instale as bibliotecas com pip install -r requirements.txt
-# Por último rode a interface com streamlit run connect.py
+# Abrir interface: streamlit run connect.py
 #
 ####################################################################################################################
 
@@ -12,11 +10,11 @@ import streamlit as st
 import psycopg2 as pg 
 import plotly.express as px
 from sqlalchemy import create_engine, text
+import streamlit_antd_components as sac
 
-# TODO Subir para o GIT;
-# TODO Adicionar interatividada em 3 consultas em uma nova aba;
-# TODO Adicionar imagens do nosso trabalho como o ER;
-# TODO Gatilho;
+# TODO Adicionar inserts do usuário;
+# TODO Adicionar gatilho;
+# TODO Adicionar um if buton = true: execute;
 
 st.set_page_config(
     page_title="Trabalho de Banco de Dados",
@@ -39,9 +37,18 @@ st.caption('# Banco de Dados IMDb')
 
 engine = create_engine("postgresql://postgres:12345@localhost:5432/trab")
 
-tab1, tab2, tab3, tab4 = st.tabs(['DB', 'Consultas s/ atributo', 'Consultas c/ atributo', 'Gatilho'])
+############################################################################################################
+#Criação de abas;
 
-with tab1:
+tab = sac.tabs([
+    sac.TabsItem(label='DB'),
+    sac.TabsItem(label='Consultas s/ atributo'),
+    sac.TabsItem(label='Consultas c/ atributo'),
+    sac.TabsItem(label='Gatilho'),
+], variant='outline', color='pink')
+
+# Aba 'DB':
+if tab == 'DB':
     table = st.selectbox('Escolha a tabela que deseja ver:', ['atuouem', 'camera', 'contemmusica', 'ehgenero', 'ganhoupremio_premios', 'genero', 'indicadopor', 'laboratorio', 'mixagemsom', 'musica', 'musicapor', 'nome', 'processocinematografico', 'temcamera', 'temlaboratorio', 'temmixagem', 'temprocessocine', 'titulo', 'trabalhou_em', 'versao'])
     
     query = f"""
@@ -53,7 +60,9 @@ with tab1:
     st.table(df)
     #st.write(df['nomegenero'].unique().tolist())
 
-with tab2:
+############################################################################################################
+# Aba 'Consultas s/ atributo':
+if tab == 'Consultas s/ atributo':
     query = {
         "Consulta 1: Contagem de títulos que têm mais de uma 70 versões": """
             SELECT t.tituloOriginal
@@ -145,7 +154,9 @@ with tab2:
 
     st.table(query_result)
 
-with tab3:
+############################################################################################################
+# Aba 'Consultas c/ atributo':
+if tab == 'Consultas c/ atributo':
     st.header('Consulta 1: Contagem de títulos que têm mais de X versões') 
     count = st.slider('Escolha o número de versões:', 50, 100)
     
@@ -202,9 +213,74 @@ with tab3:
     query_result = pd.read_sql_query(query, engine)
     st.table(query_result)
 
-with tab4:
+############################################################################################################
+# Aba 'Gatilho':
+if tab == 'Gatilho':
     
-    query_result = pd.read_sql_query(query, engine)
-    st.table(query_result)
+    #Valores a serem inseridos na tabela filme;
+    idTitulo='TT000004'
+    tituloOriginal='Meu Novo Filme'
+    tipoTitulo='Filme'
+    anoLancamento=2024
+    duracao=120
+    resumo='Um filme incrível'
+    verba=5000000
+    arrecUscan=2000000
+    arrecSemanaus=500000
+    numVotos=1000
+    anoFim=2024
+    arrecGlobal=10000000
+    mediaVotos=9.5
+    nro_ep=0
+    nro_temp=1
+    fk_Titulo_idTitulo=None
+    
+    #Dicionário com valores definidos pelo usuário;
+    insert = {
+        'idTitulo': idTitulo,
+        'tituloOriginal': tituloOriginal,
+        'tipoTitulo': tipoTitulo,
+        'anoLancamento': anoLancamento,
+        'duracao': duracao,
+        'resumo': resumo,
+        'verba': verba,
+        'arrecUscan': arrecUscan,
+        'arrecSemanaus': arrecSemanaus,
+        'numVotos': numVotos,
+        'anoFim': anoFim,
+        'arrecGlobal': arrecGlobal,
+        'mediaVotos': mediaVotos,
+        'nro_ep': nro_ep,
+        'nro_temp': nro_temp,
+        'fk_Titulo_idTitulo': fk_Titulo_idTitulo
+    }
 
+    st.write(insert)
+    
+    #Consulta SQL para a inserção
+    query = """
+        INSERT INTO Titulo (
+            idTitulo, tituloOriginal, tipoTitulo, anoLancamento, duracao, resumo,
+            verba, arrecUscan, arrecSemanaus, numVotos, anoFim, arrecGlobal,
+            mediaVotos, nro_ep, nro_temp, fk_Titulo_idTitulo
+        ) VALUES (
+            :idTitulo, :tituloOriginal, :tipoTitulo, :anoLancamento, :duracao, :resumo,
+            :verba, :arrecUscan, :arrecSemanaus, :numVotos, :anoFim, :arrecGlobal,
+            :mediaVotos, :nro_ep, :nro_temp, :fk_Titulo_idTitulo
+        )
+    """
+
+    # Execute a consulta SQL com os valores
+    #engine.execute(query, **insert)
+
+    ############################################################################################################
+    query = f"""
+        SELECT *
+        FROM titulo
+    """
+    
+    df = pd.read_sql_query(query, engine)
+    st.dataframe(df)
+
+############################################################################################################
 # Trabalho Final para a cadeira de Fundamentos de Bancos de Dados por Juliano Machado e Lucas Caíque;

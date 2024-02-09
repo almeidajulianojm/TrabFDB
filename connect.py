@@ -216,7 +216,7 @@ if tab == 'Consultas c/ atributo':
 ############################################################################################################
 # Aba 'Gatilho':
 if tab == 'Gatilho':
-    entrada = st.text_input('Input')
+    entrada = st.text_input('Escreva aquilo que será inserido na tabela Título')
 
     # Verifique se a entrada não está vazia
     if entrada:
@@ -246,37 +246,25 @@ if tab == 'Gatilho':
         # Abra uma conexão
         with engine.connect() as conexao:
             # Crie um objeto de texto SQL
-            consulta_sql = f"""
-                INSERT INTO Titulo (
+            consulta_sql = text(f"""
+                INSERT INTO titulo (
                     idTitulo, tituloOriginal, tipoTitulo, anoLancamento, duracao, resumo,
-                    verba, arrecUscan, arrecSemanaus, numVotos, anoFim, arrecGlobal",
+                    verba, arrecUscan, arrecSemanaus, numVotos, anoFim, arrecGlobal,
                     mediaVotos, nro_ep, nro_temp, fk_Titulo_idTitulo
                 ) VALUES (
-                    {idTitulo}, {tituloOriginal}, {tipoTitulo}, {anoLancamento}, {duracao}, {resumo},
+                    '{idTitulo}', '{tituloOriginal}', '{tipoTitulo}', {anoLancamento}, {duracao}, '{resumo}',
                     {verba}, {arrecUscan}, {arrecSemanaus}, {numVotos}, {anoFim}, {arrecGlobal},
-                    {mediaVotos}, {nro_ep}, {nro_temp}, {fk_Titulo_idTitulo}
+                    {mediaVotos}, {nro_ep}, {nro_temp}, '{fk_Titulo_idTitulo}'
                 )
-            """
+            """)
 
             # Execute a consulta SQL com os valores usando a função execute
-            conexao.execute(consulta_sql, 
-                            idTitulo=idTitulo, 
-                            tituloOriginal=tituloOriginal, 
-                            tipoTitulo=tipoTitulo, 
-                            anoLancamento=anoLancamento, 
-                            duracao=duracao, 
-                            resumo=resumo, 
-                            verba=verba, 
-                            arrecUscan=arrecUscan, 
-                            arrecSemanaus=arrecSemanaus, 
-                            numVotos=numVotos, 
-                            anoFim=anoFim, 
-                            arrecGlobal=arrecGlobal, 
-                            mediaVotos=mediaVotos, 
-                            nro_ep=nro_ep, 
-                            nro_temp=nro_temp, 
-                            fk_Titulo_idTitulo=fk_Titulo_idTitulo)
-
+            try:
+                conexao.execute(consulta_sql)
+                conexao.commit()
+            except Exception as e:
+                st.error(f"Error: {e}")
+            
     ############################################################################################################
     query = f"""
         SELECT *
@@ -289,4 +277,4 @@ if tab == 'Gatilho':
 ############################################################################################################
 # Trabalho Final para a cadeira de Fundamentos de Bancos de Dados por Juliano Machado e Lucas Caíque;
 
-# TT0000004, Novo Filme, Filme, 2024, 120, Descrição, 5000000, 2000000, 500000, 1000, 2024, 10000000, 9.5, 0, 1, TT0000004
+# tt0000001, Novo Filme, Filme, 2024, 120, Descrição, 5000000, 2000000, 500000, 1000, 2024, 10000000, 9.5, 0, 1, tt0120586

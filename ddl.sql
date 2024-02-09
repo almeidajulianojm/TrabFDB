@@ -257,3 +257,13 @@ ALTER TABLE musicaPor ADD CONSTRAINT FK_musicaPor_3
     REFERENCES Nome (idNome)
     ON DELETE SET NULL;
 
+CREATE VIEW VisaoInformacoesTitulos AS
+ SELECT 
+     t.idTitulo, 
+     t.tituloOriginal, 
+     COUNT(DISTINCT ae.fk_Nome_idNome) AS ContagemAtores,
+     COUNT(DISTINCT te.fk_Nome_idNome) AS ContagemOutrasFuncoes
+ FROM Titulo AS t
+ LEFT JOIN AtuouEm AS ae ON (t.idTitulo = ae.fk_Titulo_idTitulo)
+ LEFT JOIN Trabalhou_em AS te ON (t.idTitulo = te.fk_Titulo_idTitulo)
+ GROUP BY t.idTitulo, t.tituloOriginal;

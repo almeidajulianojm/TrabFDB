@@ -12,10 +12,6 @@ import plotly.express as px
 from sqlalchemy import create_engine, text
 import streamlit_antd_components as sac
 
-# TODO Adicionar inserts do usuário;
-# TODO Adicionar gatilho;
-# TODO Adicionar um if buton = true: execute;
-
 st.set_page_config(
     page_title="Trabalho de Banco de Dados",
     page_icon="🎥",
@@ -25,21 +21,10 @@ st.set_page_config(
 st.caption('# Banco de Dados IMDb')
 
 # Conexão com a base de dados:
-# conn = pg.connect(
-#     host="localhost",
-#     port=5432,
-#     user="postgres",
-#     password="12345",
-#     database="trab"
-# )
-
-# cursor = conn.cursor()
-
 engine = create_engine("postgresql://postgres:12345@localhost:5432/trab")
 
 ############################################################################################################
-#Criação de abas;
-
+# Criação de abas;
 tab = sac.tabs([
     sac.TabsItem(label='DB'),
     sac.TabsItem(label='Consultas s/ atributo'),

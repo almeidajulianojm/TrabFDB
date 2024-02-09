@@ -216,62 +216,66 @@ if tab == 'Consultas c/ atributo':
 ############################################################################################################
 # Aba 'Gatilho':
 if tab == 'Gatilho':
-    
-    #Valores a serem inseridos na tabela filme;
-    idTitulo='TT000004'
-    tituloOriginal='Meu Novo Filme'
-    tipoTitulo='Filme'
-    anoLancamento=2024
-    duracao=120
-    resumo='Um filme incrível'
-    verba=5000000
-    arrecUscan=2000000
-    arrecSemanaus=500000
-    numVotos=1000
-    anoFim=2024
-    arrecGlobal=10000000
-    mediaVotos=9.5
-    nro_ep=0
-    nro_temp=1
-    fk_Titulo_idTitulo=None
-    
-    #Dicionário com valores definidos pelo usuário;
-    insert = {
-        'idTitulo': idTitulo,
-        'tituloOriginal': tituloOriginal,
-        'tipoTitulo': tipoTitulo,
-        'anoLancamento': anoLancamento,
-        'duracao': duracao,
-        'resumo': resumo,
-        'verba': verba,
-        'arrecUscan': arrecUscan,
-        'arrecSemanaus': arrecSemanaus,
-        'numVotos': numVotos,
-        'anoFim': anoFim,
-        'arrecGlobal': arrecGlobal,
-        'mediaVotos': mediaVotos,
-        'nro_ep': nro_ep,
-        'nro_temp': nro_temp,
-        'fk_Titulo_idTitulo': fk_Titulo_idTitulo
-    }
+    entrada = st.text_input('Input')
 
-    st.write(insert)
-    
-    #Consulta SQL para a inserção
-    query = """
-        INSERT INTO Titulo (
-            idTitulo, tituloOriginal, tipoTitulo, anoLancamento, duracao, resumo,
-            verba, arrecUscan, arrecSemanaus, numVotos, anoFim, arrecGlobal,
-            mediaVotos, nro_ep, nro_temp, fk_Titulo_idTitulo
-        ) VALUES (
-            :idTitulo, :tituloOriginal, :tipoTitulo, :anoLancamento, :duracao, :resumo,
-            :verba, :arrecUscan, :arrecSemanaus, :numVotos, :anoFim, :arrecGlobal,
-            :mediaVotos, :nro_ep, :nro_temp, :fk_Titulo_idTitulo
-        )
-    """
+    # Verifique se a entrada não está vazia
+    if entrada:
+        # Separe a entrada em uma lista
+        a = entrada.replace(' ', '').split(',')
 
-    # Execute a consulta SQL com os valores
-    #engine.execute(query, **insert)
+        # Converta os valores para os tipos corretos
+        idTitulo = a[0]
+        tituloOriginal = a[1]
+        tipoTitulo = a[2]
+        anoLancamento = int(a[3])
+        duracao = int(a[4])
+        resumo = a[5]
+        verba = float(a[6])
+        arrecUscan = float(a[7])
+        arrecSemanaus = float(a[8])
+        numVotos = int(a[9])
+        anoFim = int(a[10])
+        arrecGlobal = float(a[11])
+        mediaVotos = float(a[12])
+        nro_ep = int(a[13])
+        nro_temp = int(a[14])
+        fk_Titulo_idTitulo = a[15]
+
+        st.write(idTitulo)
+        
+        # Abra uma conexão
+        with engine.connect() as conexao:
+            # Crie um objeto de texto SQL
+            consulta_sql = f"""
+                INSERT INTO Titulo (
+                    idTitulo, tituloOriginal, tipoTitulo, anoLancamento, duracao, resumo,
+                    verba, arrecUscan, arrecSemanaus, numVotos, anoFim, arrecGlobal",
+                    mediaVotos, nro_ep, nro_temp, fk_Titulo_idTitulo
+                ) VALUES (
+                    {idTitulo}, {tituloOriginal}, {tipoTitulo}, {anoLancamento}, {duracao}, {resumo},
+                    {verba}, {arrecUscan}, {arrecSemanaus}, {numVotos}, {anoFim}, {arrecGlobal},
+                    {mediaVotos}, {nro_ep}, {nro_temp}, {fk_Titulo_idTitulo}
+                )
+            """
+
+            # Execute a consulta SQL com os valores usando a função execute
+            conexao.execute(consulta_sql, 
+                            idTitulo=idTitulo, 
+                            tituloOriginal=tituloOriginal, 
+                            tipoTitulo=tipoTitulo, 
+                            anoLancamento=anoLancamento, 
+                            duracao=duracao, 
+                            resumo=resumo, 
+                            verba=verba, 
+                            arrecUscan=arrecUscan, 
+                            arrecSemanaus=arrecSemanaus, 
+                            numVotos=numVotos, 
+                            anoFim=anoFim, 
+                            arrecGlobal=arrecGlobal, 
+                            mediaVotos=mediaVotos, 
+                            nro_ep=nro_ep, 
+                            nro_temp=nro_temp, 
+                            fk_Titulo_idTitulo=fk_Titulo_idTitulo)
 
     ############################################################################################################
     query = f"""
@@ -284,3 +288,5 @@ if tab == 'Gatilho':
 
 ############################################################################################################
 # Trabalho Final para a cadeira de Fundamentos de Bancos de Dados por Juliano Machado e Lucas Caíque;
+
+# TT0000004, Novo Filme, Filme, 2024, 120, Descrição, 5000000, 2000000, 500000, 1000, 2024, 10000000, 9.5, 0, 1, TT0000004

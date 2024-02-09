@@ -2,7 +2,7 @@
 Ele recalcula automaticamente a média de votos na tabela Titulo para refletir a
 alteração. */
 
-begin;
+BEGIN;
 
 -- Gatilho para inserção de título
 CREATE OR REPLACE FUNCTION insere_titulo_trigger()
@@ -22,10 +22,10 @@ AFTER INSERT ON Titulo
 FOR EACH ROW
 EXECUTE FUNCTION insere_titulo_trigger();
 
-commit;
+COMMIT;
 
 -- teste 
-begin;
+BEGIN;
 
 INSERT INTO Titulo (
     idTitulo,
@@ -63,4 +63,4 @@ INSERT INTO Titulo (
 	NULL
 );
 
-commit;
+COMMIT;

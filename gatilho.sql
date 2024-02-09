@@ -2,11 +2,8 @@
 Ele recalcula automaticamente a média de votos na tabela Titulo para refletir a
 alteração. */
 
-<<<<<<< HEAD
 begin;
 
-=======
->>>>>>> refs/remotes/origin/main
 -- Gatilho para inserção de título
 CREATE OR REPLACE FUNCTION insere_titulo_trigger()
 RETURNS TRIGGER AS $insere_titulo_trigger$

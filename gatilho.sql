@@ -1,6 +1,4 @@
-/* Um gatilho que é acionado sempre que um novo voto é adicionado a um título.
-Ele recalcula automaticamente a média de votos na tabela Titulo para refletir a
-alteração. */
+/* Um gatilho que é acionado sempre que um novo titulo é inserido na tabela título. Ele irá adicionar essa entrada como a primeira versão do mesmo na tabela versão */
 
 BEGIN;
 
@@ -21,46 +19,5 @@ CREATE TRIGGER insere_titulo_trigger
 AFTER INSERT ON Titulo
 FOR EACH ROW
 EXECUTE FUNCTION insere_titulo_trigger();
-
-COMMIT;
-
--- teste 
-BEGIN;
-
-INSERT INTO Titulo (
-    idTitulo,
-    tituloOriginal,
-    tipoTitulo,
-    anoLancamento,
-    duracao,
-    resumo,
-    verba,
-    arrecUscan,
-    arrecSemanaus,
-    numVotos,
-    anoFim,
-    arrecGlobal,
-    mediaVotos,
-    nro_ep,
-    nro_temp,
-    fk_Titulo_idTitulo
-) VALUES (
-    'TT000004',
-    'Meu Novo Filme',
-    'Filme',
-    2024,
-    120,
-    'Um filme incrível',
-    5000000,
-    2000000,
-    500000,
-    1000,
-    2024,
-    10000000,
-    9.5,
-    0,
-    1,
-	NULL
-);
 
 COMMIT;
